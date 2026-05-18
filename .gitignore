@@ -1,0 +1,24 @@
+# Environment and secrets
+.env
+.env.*
+*.env
+!.env.example
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Model files (rebuild from train_model.py)
+*.pkl
+*.joblib
+
+# Jupyter cache
+.ipynb_checkpoints/
+
+# IDE & OS files
+.vscode/
+.idea/
+*.swp
+.DS_Store
