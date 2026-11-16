@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+from io import StringIO
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
@@ -9,6 +10,7 @@ from predict import predict_aqi
 from cities import cities
 import os
 from dotenv import load_dotenv
+
 
 load_dotenv()
 API_KEY = os.getenv("OPENWEATHER_API_KEY", "")
@@ -458,11 +460,11 @@ with tabs[0]:
     if not forecast_df.empty:
         @st.cache_data(ttl=600, show_spinner=False)
         def _forecast_aqi(df_json, _temp, _hum):
-            df = pd.read_json(df_json)
+            df = pd.read_json(StringIO(df_json))
             df["aqi_pred"] = df.apply(
                 lambda r: predict_aqi(r["pm25"], r["pm10"], r["no2"], _temp, _hum), axis=1)
             return df
-        forecast_df = _forecast_aqi(forecast_df.to_json(), temp, humidity)
+        forecast_df = _forecast_aqi(forecast_df, temp, humidity)
         fig_fc = go.Figure()
         fig_fc.add_trace(go.Scatter(
             x=forecast_df["datetime"][:8],
