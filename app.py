@@ -9,7 +9,6 @@ from predict import predict_aqi
 from cities import cities
 import os
 from dotenv import load_dotenv
-from io import StringIO
 
 load_dotenv()
 API_KEY = os.getenv("OPENWEATHER_API_KEY", "")
@@ -459,7 +458,7 @@ with tabs[0]:
     if not forecast_df.empty:
         @st.cache_data(ttl=600, show_spinner=False)
         def _forecast_aqi(df_json, _temp, _hum):
-            df = pd.read_json(StringIO(df_json))
+            df = pd.read_json(df_json)
             df["aqi_pred"] = df.apply(
                 lambda r: predict_aqi(r["pm25"], r["pm10"], r["no2"], _temp, _hum), axis=1)
             return df
